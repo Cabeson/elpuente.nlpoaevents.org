@@ -355,8 +355,11 @@ img.bleed { position: absolute; inset: 0; width: 100%; height: 100%; object-fit:
     return 'Pages ' + (a + 1) + '–' + (a + 2) + ' of ' + N;
   }
   function update(i) { countEl.textContent = label(i); loadNear(i); }
-  pf.on('flip', function (e) { update(e.data); hideHint(); });
-  pf.on('changeState', function (e) { if (e.data === 'flipping' || e.data === 'user_fold') { rustle(); loadNear(pf.getCurrentPageIndex()); } });
+  pf.on('flip', function () { update(pf.getCurrentPageIndex()); hideHint(); });
+  pf.on('changeState', function (e) {
+    if (e.data === 'flipping' || e.data === 'user_fold') { rustle(); loadNear(pf.getCurrentPageIndex()); }
+    if (e.data === 'read') update(pf.getCurrentPageIndex());
+  });
   pf.on('changeOrientation', function () { update(pf.getCurrentPageIndex()); });
 
   function hideHint() { var h = document.getElementById('hint'); if (h) h.style.opacity = '0'; }
